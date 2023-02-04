@@ -1,0 +1,43 @@
+<?php
+    
+    session_start();
+    require('../app/app.php');
+    ensure_user_is_authenticated();
+
+    if(is_post()) {
+       $term = sanitize($_POST['term']);
+
+
+       if(empty($term)) {
+
+       } else {
+            Data::delete_term($term);
+            redirect('index.php');
+       }
+    }
+    
+    if(is_get()) {
+        $key = sanitize($_GET['term']);
+
+        if(empty($key)) {
+            view('not_found');
+            die();
+        }
+
+
+        $term = Data::get_term($key);
+
+        if($term === false) {
+            view('not_found');
+            die();
+        }
+
+        view('admin/delete', $term);
+    }
+
+
+    
+
+
+
+?>
